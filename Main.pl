@@ -1,4 +1,4 @@
-:- use_module('./Menus/MenuPrincipalController.pl').
+:- use_module('./Menus/Principal/MenuPrincipalController.pl').
 
 :- initialization(startMenu).
 
