@@ -30,8 +30,6 @@ adicionarFilme :-
     write("Digite o genero do filme:"),
     read_line_to_string(user_input, Genero),
     createFilme("0", Titulo, Duracao, Genero, Filme),
-    saveFilme(Filme),
-    write(Filme).
-
+    saveFilme(Filme).
 
 
