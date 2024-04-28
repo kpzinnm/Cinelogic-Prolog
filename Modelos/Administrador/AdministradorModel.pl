@@ -1,4 +1,4 @@
 :- module(AdministradorModel, [createAdministrador/4]).
 
-createAdministrador(ident, login, senha) :-
-    Administrador = administrador(ident, login, senha).
+createAdministrador(Ident, Login, Senha, Administrador) :-
+    Administrador = administrador(Ident, Login, Senha).
