@@ -1,4 +1,4 @@
-:- module(MenuConfiguracoesController, [starMenuConfiguracoes/0]).
+:- module(MenuConfiguracoesController, [startMenuConfiguracoes/0]).
 
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Modelos/Filmes/FilmeModel.pl').
@@ -7,7 +7,7 @@
 :- use_module('./Servicos/Bomboniere/BomboniereController.pl').
 
 
-starMenuConfiguracoes :-
+startMenuConfiguracoes :-
     printMatrix('./Interfaces/Configuracoes/menuConfiguracoesAdmin.txt'),
     write("Digite uma opção: "),
     flush_output,
@@ -34,14 +34,14 @@ adicionarFilme :-
     read_line_to_string(user_input, Genero),
     createFilme("0", Titulo, Duracao, Genero, Filme),
     saveFilme(Filme),
-    starMenuConfiguracoes.
+    startMenuConfiguracoes.
 
 adicionarProdutoBomboniere :-
     printMatrix("./Interfaces/Configuracoes/menuCadastroBomboniere.txt"),
     write("Digite o título do produto: "),
-    read_line_to_string(user_input, TituloProduto),
+    read_line_to_string(user_input, Name),
     write("Digite o preço do produto: "),
     read_line_to_string(user_input, Preco),
-    createProduto("0", TituloProduto, Preco, Produto),
+    createProduto("0", Name, Preco, Produto),
     saveProduto(Produto),
     startMenuConfiguracoes.

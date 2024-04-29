@@ -1,5 +1,5 @@
-:- module(ProdutoModel, [createProduto/5]).
+:- module(ProdutoModel, [createProduto/4]).
 
 
-createProduto(Ident, TituloProduto, Preco, Produto) :-
-    Produto = produto(Ident, TituloProduto, Preco).
+createProduto(Ident, Name, Preco, Produto) :-
+    Produto = produto(Ident, Name, Preco).

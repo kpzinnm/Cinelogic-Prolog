@@ -18,7 +18,7 @@ optionsStartMenu(UserChoice) :-
     (UserChoice == "I" ; UserChoice ==  "i") -> startMenuCompraFilmes ;
     (UserChoice == "B" ; UserChoice ==  "b") -> startMenuCompraBomboniere ;
     (UserChoice == "R" ; UserChoice ==  "r") -> write(UserChoice) ;
-    (UserChoice == "A" ; UserChoice ==  "a") -> starMenuConfiguracoes ;
+    (UserChoice == "A" ; UserChoice ==  "a") -> startMenuConfiguracoes ;
     (UserChoice == "S" ; UserChoice ==  "s") -> halt ;
     writeln("\nOpção Inválida!"),
     sleep(0.7),

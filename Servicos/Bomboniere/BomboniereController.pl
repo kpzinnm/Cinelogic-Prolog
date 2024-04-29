@@ -13,10 +13,9 @@ saveProduto(Produto) :-
     lerJSON("./BancoDeDados/Bomboniere/Bomboniere.json", File),
     produtosToJSON(File, ListaProdutosJSON),
     NextTamanho is Tamanho + 1,
-    ProdutosToJSON(NextTamanho, Name, Preco, ProdutoJSON),
+    produtoToJSON(NextTamanho, Name, Preco, ProdutoJSON),
     append(ListaProdutosJSON, [ProdutoJSON], Saida),
     open("./BancoDeDados/Bomboniere/Bomboniere.json", write, Stream), write(Stream, Saida), close(Stream).
-
 
 produtoToJSON(Ident, Name, Preco, Out) :-
 	swritef(Out, '{"ident": %w, "name": "%w", "preco": "%w"}', [Ident, Name, Preco]).
@@ -24,7 +23,7 @@ produtoToJSON(Ident, Name, Preco, Out) :-
 produtosToJSON([], []).
 produtosToJSON([H|T], [X|Out]) :- 
 	produtoToJSON(H.ident, H.name, H.preco, X), 
-	produtoToJSON(T, Out).
+	produtosToJSON(T, Out).
 
 /*Funções de get produtos*/
 getProdutosJSON(Out) :-
@@ -70,7 +69,7 @@ updateAllProdutos(FilePath, [H|T]) :-
     write(Ident),
     updateProdutosName(FilePath, Ident),
     updateProdutosPreco(FilePath, Ident),
-    updateAllProdutos(FilePath, T).
+    updateAllProdutos(FilePath,T).
 
 updateProdutosName(FilePath, Ident) :-
     getProdutoName(Ident, Name),
