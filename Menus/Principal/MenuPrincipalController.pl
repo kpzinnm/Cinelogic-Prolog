@@ -3,7 +3,7 @@
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Menus/Compras/MenuCompraFilmes.pl').
 :- use_module('./Menus/Configuracoes/MenuConfiguracoesController.pl').
-:- use_module('./Menus/Configuracoes/MenuLoginAdministradorController.pl').
+:- use_module('./Menus/Compras/MenuCompraBomboniere.pl').
 
 startMenu :-
     printMatrix('./Interfaces/Principal/MenuPrincipal.txt'),
@@ -13,10 +13,12 @@ startMenu :-
     char_code(_, 1),
     optionsStartMenu(UserChoice).
 
+
 optionsStartMenu(UserChoice) :-
-    (UserChoice == "I" ; UserChoice ==  "i") -> startMenuCompraFilmes ;   
+    (UserChoice == "I" ; UserChoice ==  "i") -> startMenuCompraFilmes ;
+    (UserChoice == "B" ; UserChoice ==  "b") -> startMenuCompraBomboniere ;
     (UserChoice == "R" ; UserChoice ==  "r") -> write(UserChoice) ;
-    (UserChoice == "A" ; UserChoice ==  "a") -> startLoginAdministrador ;
+    (UserChoice == "A" ; UserChoice ==  "a") -> starMenuConfiguracoes ;
     (UserChoice == "S" ; UserChoice ==  "s") -> halt ;
     writeln("\nOpção Inválida!"),
     sleep(0.7),

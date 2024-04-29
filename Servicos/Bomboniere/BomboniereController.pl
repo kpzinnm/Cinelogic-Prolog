@@ -46,15 +46,15 @@ buscarProdutoPorId(Ident, [_|Resto], ProdutoEncontrado) :-
     buscarProdutoPorId(Ident, Resto, ProdutoEncontrado).
 
 getProdutoIdent(Produto, Ident) :- 
-    Produto = produto(Ident, _, _, _).
+    Produto = produto(Ident, _, _).
 
 getProdutoName(ID, Name) :- 
     getProduto(ID, Produto),
-    Produto = produto(_, Name, _, _).
+    Produto = produto(_, Name, _).
 
 getProdutoPreco(ID, Preco) :- 
     getProduto(ID, Produto),
-    Produto = produto(_, _, Preco, _).
+    Produto = produto(_, _, Preco).
 
 /*Exibição de produtos*/
 
@@ -69,7 +69,8 @@ updateAllProdutos(FilePath, [H|T]) :-
     getProdutoIdent(H, Ident),
     write(Ident),
     updateProdutosName(FilePath, Ident),
-    updateProdutosPreco(FilePath, Ident).
+    updateProdutosPreco(FilePath, Ident),
+    updateAllProdutos(FilePath, T).
 
 updateProdutosName(FilePath, Ident) :-
     getProdutoName(Ident, Name),

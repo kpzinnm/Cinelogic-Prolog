@@ -3,8 +3,9 @@
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Modelos/Filmes/FilmeModel.pl').
 :- use_module('./Servicos/Filmes/FilmesController.pl').
-:- use_module('./Servicos/Administrador/AdministradorController.pl').
-:- use_module('./Modelos/Administrador/AdministradorModel.pl').
+:- use_module('./Modelos/Produtos/ProdutoModel.pl').
+:- use_module('./Servicos/Bomboniere/BomboniereController.pl').
+
 
 starMenuConfiguracoes :-
     printMatrix('./Interfaces/Configuracoes/menuConfiguracoesAdmin.txt'),
@@ -16,9 +17,9 @@ starMenuConfiguracoes :-
 
 
 optionsStartMenu(UserChoice) :-
-    (UserChoice == "V" ; UserChoice ==  "v") -> startMenu ;  
-    (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ; 
-    (UserChoice == "A" ; UserChoice == "a") -> adicionarAdministrador;
+    (UserChoice == "V" ; UserChoice ==  "v") -> startMenu ;
+    (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ;
+    (UserChoice == "B" ; UserChoice ==  "b") -> adicionarProdutoBomboniere ;
     writeln("\nOpção Inválida!"),
     sleep(0.7),
     startMenu.
@@ -35,14 +36,12 @@ adicionarFilme :-
     saveFilme(Filme),
     starMenuConfiguracoes.
 
-adicionarAdministrador :-
-    printMatrix("./Interfaces/Configuracoes/menuConfiguracoesLogin.txt"),
-    write("Digite o login: "),
-    flush_output,
-    read_line_to_string(user_input, UserLogin),
-    write("Digite a senha: "),
-    flush_output,
-    read_line_to_string(user_input, UserPassword),
-    createAdministrador(0, UserLogin, UserPassword, Administrador),
-    saveAdministrador(Administrador),
-    starMenuConfiguracoes.
+adicionarProdutoBomboniere :-
+    printMatrix("./Interfaces/Configuracoes/menuCadastroBomboniere.txt"),
+    write("Digite o título do produto: "),
+    read_line_to_string(user_input, TituloProduto),
+    write("Digite o preço do produto: "),
+    read_line_to_string(user_input, Preco),
+    createProduto("0", TituloProduto, Preco, Produto),
+    saveProduto(Produto),
+    startMenuConfiguracoes.
