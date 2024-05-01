@@ -1,4 +1,4 @@
-:- module(FilmesController, [saveFilme/1, updateFilmesMenu/0, isFilmeValido/2]).
+:- module(FilmesController, [saveFilme/1, updateFilmesMenu/0, isFilmeValido/2, getFilmeName/2]).
 
 :- use_module('./Utils/JsonUtils.pl').
 :- use_module('./Utils/MatrixUtils.pl').

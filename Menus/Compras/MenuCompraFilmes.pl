@@ -41,7 +41,7 @@ startCompra(EmailComprador) :-
         write("Por favor, insira o número de ingressos: "),
         flush_output,
         read_line_to_string(user_input, NumeroIngressos),
-        createCompra(0, EmailComprador, NumeroIngressos, 0, Compra),
+        createCompra(0, EmailComprador, NumeroIngressos, 0, Ident, Compra),
         loadfinalizaCompraMenu(Compra)
         ;
         write("Filme inválido!"),
@@ -62,7 +62,7 @@ loadfinalizaCompraMenu(Compra):-
     optionsFinalizacaoMenu(UserChoice, Compra).
 
 updateFinalizacaoMenu(Compra) :-
-    Compra = compra(_,EmailCliente,NumeroIngressos,ValorCompra),
+    Compra = compra(_,EmailCliente,NumeroIngressos,ValorCompra, FilmeIdent),
     FilePath = "./Interfaces/Compras/MenuFinalizacaoCompra.txt",
     resetMenu(FilePath, "./Interfaces/Compras/MenuFinalizacaoCompraBase.txt"),
     concat_atom(["* Email Comprador:", EmailCliente], ' ', EmailFull),

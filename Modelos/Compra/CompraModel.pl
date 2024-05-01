@@ -1,4 +1,4 @@
-:- module(CompraModel, [createCompra/5]).
+:- module(CompraModel, [createCompra/6]).
 
-createCompra(Ident, EmailCliente, NumeroIngressos, ValorCompra, Compra) :-
-    Compra = compra(Ident, EmailCliente, NumeroIngressos, ValorCompra).
+createCompra(Ident, EmailCliente, NumeroIngressos, ValorCompra, FilmeIdent, Compra) :-
+    Compra = compra(Ident, EmailCliente, NumeroIngressos, ValorCompra, FilmeIdent).
