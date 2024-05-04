@@ -1,130 +1,93 @@
-:- module(SessoesController, [saveSessao/1, updateSessoesMenu/0, isSessaoValida/2, getSessaoName/2]).
+:- use_module(library(lists)).
 
-:- use_module('./Utils/JsonUtils.pl').
-:- use_module('./Utils/MatrixUtils.pl').
-:- use_module('./Utils/UpdateUtils.pl').
-:- use_module(library(http/json)).
+% Constantes
+constantePATH("./BancoDeDados/Sessao.json").
+constanteTempPATH("./BancoDeDados/SessaoTemp.json").
 
-/*Funções de save filmes*/
-saveSessao(Sessao) :- 
-    getSessoesJSON(ListaSessoes),
-    length(ListaSessoes, Tamanho),
-    (Tamanho < 4 ->  % Verifica se o tamanho atual é menor que 4
-        Sessao = sessao(Ident, IdFilme, Capacidade, Horario, IdSala),
-        lerJSON("./BancoDeDados/Sessoes/Sessao.json", File),
-        SessoesToJSON(File, ListaSessoesJSON),
-        NextTamanho is Tamanho + 1,
-        SessaoToJSON(NextTamanho, IdFilme, Capacidade, Horario, IdSala, SessaoJSON),
-        append(ListaSessoesJSON, [SessaoJSON], Saida),
-        open("./BancoDeDados/Sessoes/Sessao.json", write, Stream), write(Stream, Saida), close(Stream)
-    ;
-        write('Limite máximo de sessões atingido (4 sessões). \n'),
-        sleep(1.3)
+% Retorna uma lista com todas as sessoes cadastradas
+getSessoesJSON(Sessoes) :-
+    constantePATH(Path),
+    read_file_to_string(Path, FileString, []),
+    atom_string(FileAtom, FileString),
+    atom_json_term(FileAtom, Sessoes, [as(term)]).
+
+% Adiciona uma sessao ao arquivo JSON
+adicionaSessaoJSON(Sessao) :-
+    getSessoesJSON(Sessoes),
+    length(Sessoes, Length),
+    NewIdent is Length + 1,
+    mudaId(Sessao, NewIdent, SessaoComNovoId),
+    append(Sessoes, [SessaoComNovoId], NovaLista),
+    constanteTempPATH(TempPath),
+    open(TempPath, write, Stream),
+    write_term(Stream, NovaLista, [as(term)]),
+    close(Stream),
+    rename_file(constanteTempPATH, constantePATH).
+
+% Muda o id de uma sessao de acordo com a quantidade de sessoes
+mudaId(Sessao, NewIdent, SessaoComNovoId) :-
+    Sessao = sessao(OldIdent, IdFilme, Capacidade, Horario, IdSala),
+    SessaoComNovoId = sessao(NewIdent, Filme, Capacidade, Horario, IdSala).
+
+% Verifica se uma sessao foi cadastrada a partir do id
+contemSessao(IdSessao, Sessoes) :-
+    member(sessao(IdSessao, _, _, _, _), Sessoes).
+
+% Deleta uma sessao do arquivo JSON a partir do identificador
+deletaSessao(Ident) :-
+    getSessoesJSON(Sessoes),
+    deleteSessaoPorId(Ident, Sessoes, NovaLista),
+    length(NovaLista, NewLength),
+    length(Sessoes, OldLength),
+    NewLength < OldLength,
+    constanteTempPATH(TempPath),
+    open(TempPath, write, Stream),
+    write_term(Stream, NovaLista, [as(term)]),
+    close(Stream),
+    rename_file(constanteTempPATH, constantePATH).
+
+% Remove uma sessao da lista com base no identificador
+deleteSessaoPorId(_, [], []).
+deleteSessaoPorId(Ident, [sessao(Ident, _, _, _, _)|T], NovasSessoes) :-
+    deleteSessaoPorId(Ident, T, NovasSessoes).
+deleteSessaoPorId(Ident, [H|T], [H|NovasSessoes]) :-
+    H = sessao(Id, _, _, _, _),
+    Id \= Ident,
+    deleteSessaoPorId(Ident, T, NovasSessoes).
+
+% Verifica se o horario esta no formato correto, hora >=0 e <=23 e minuto >=0 e <=59
+validaHorario(Hora, Minuto) :-
+    between(0, 23, Hora),
+    between(0, 59, Minuto).
+
+% Função para comparar o horário das sessões
+comparaHorarioSessao((Hora1, Minuto1), (Hora2, Minuto2)) :-
+    Hora1 =:= Hora2,
+    Minuto1 =:= Minuto2.
+
+% Verifica se o filme terminou uma hora antes do inicio de outra sessao
+verificaFilmeTerminou(SessaoNova, SessaoExistente) :-
+    duracaoFilmeSessaoExistente(SessaoExistente, DuracaoExistente),
+    duracaoFilmeSessaoNova(SessaoNova, DuracaoNova),
+    horario(SessaoExistente, HorasExistente, MinutosExistente),
+    horario(SessaoNova, HorasNova, MinutosNova),
+    TotalMinutosExistente is HorasExistente * 60 + DuracaoExistente + MinutosExistente,
+    TotalMinutosNova is HorasNova * 60 + DuracaoNova + MinutosNova,
+    TotalMinutosSessaoNova is HorasNova * 60 + MinutosNova,
+    TotalMinutosSessaoExistente is HorasExistente * 60 + MinutosExistente,
+    (   HorasNova < HorasExistente ->
+        TotalMinutosSessaoExistente - TotalMinutosNova < 60
+    ;   TotalMinutosSessaoNova - TotalMinutosExistente < 60
     ).
 
+% Duração do filme da sessão existente
+duracaoFilmeSessaoExistente(sessao(_, filme(_, _, _, Duracao), _), DuracaoFilme) :-
+    number_codes(DuracaoFilme, Duracao).
 
-sessaoToJSON(Ident, IdFilme, Capacidade, Horario, IdSala, Out) :-
-	swritef(Out, '{"ident": %w, "idFilme": "%w", "capacidade": "%w", "horario": "%w", "idSala": "%w"}', [Ident, IdFilme, Capacidade, Horario, IdSala]).
+% Duração do filme da sessão nova
+duracaoFilmeSessaoNova(sessao(_, filme(_, _, _, Duracao), _), DuracaoFilme) :-
+    number_codes(DuracaoFilme, Duracao).
 
-sessoesToJSON([], []).
-sessoesToJSON([H|T], [X|Out]) :- 
-	sessaoToJSON(H.ident, H.idFilme, H.capacidade, H.horario, H.idSala, X), 
-	sessoesToJSON(T, Out).
-
-/*Funções de get sessões*/
-getSessoesJSON(Out) :-
-	lerJSON("./BancoDeDados/Sessoes/Sessao.json", Sessoes),
-	exibirSessoesAux(Sessoes , Result),
-    Out = Result.
-
-exibirSessoesAux([], []).
-exibirSessoesAux([H|T], [sessao(H.ident, H.idFilme, H.capacidade, H.horario, H.idSala)|Rest]) :- 
-    exibirSessoesAux(T, Rest).
-
-getSessao(Int, Sessao) :- 
-    getSessoesJSON(Out), 
-    buscarSessaoPorId(Int, Out, Sessao).
-
-buscarSessaoPorId(_, [], _) :- fail.
-buscarSessaoPorId(Ident, [sessao(Ident, IdFilme, Capacidade, Horario, IdSala)|_], sessao(Ident, IdFilme, Capacidade, Horario, IdSala)).
-buscarSessaoPorId(Ident, [_|Resto], SessaoEncontrada) :-
-    buscarSessaoPorId(Ident, Resto, SessaoEncontrada).
-
-getSessaoIdent(Sessao, Ident) :- 
-    Sessao = sessao(Ident, _, _, _, _).
-
-getSessaoIdFilme(ID, IdFilme) :- 
-    getSessao(ID, Sessao),
-    Sessao = sessao(_, IdFilme, _, _, _).
-
-getSessaoCapacidade(ID, Capacidade) :- 
-    getSessao(ID, Sessao),
-    Sessao = sessao(_, _, Capacidade, _, _).
-
-getSessaoHorario(ID, Horario) :- 
-    getSessao(ID, Sessao),
-    Sessao = sessao(_, _, _, Horario, _).
-
-getSessaoIdSala(ID, IdSala)
-    getSessao(ID, Sessao),
-    Sessao = sessao(_, _, _, _, IdSala).
-
-/*Exibição de sessões*/
-
-updateSessoesMenu :-
-    FilePath = "./Interfaces/Compras/Sessoes/MenuCompraSessoes.txt",
-    resetMenu(FilePath, "./Interfaces/Compras/Sessoes/MenuCompraSessoesBase.txt"),
-    getSessoesJSON(Sessoes),
-    updateAllSessoes(FilePath, Sessoes).
-
-updateAllSessoes(_, []) :- !.
-updateAllSessoes(FilePath, [H|T]) :-
-    getSessaoIdent(H, Ident),
-    updateSessoesIdFilme(FilePath, Ident),
-    updateSessoesCapacidade(FilePath, Ident),
-    updateSessoesHorario(FilePath, Ident),
-    updateSessoesIdSala(FilePath, Ident),
-    updateAllSessoes(FilePath, T).
-
-updateSessoesIdFilme(FilePath, Ident) :-
-    getSessaoIdFilme(Ident, IdFilme),
-    concat_atom(["(", Ident, ") ", IdFilme], '', FullName),
-    getColRow(Ident, Row, Col),
-    writeMatrixValue(FilePath, FullName, Row, Col).
-
-updateSessoesCapacidade(FilePath, Ident) :-
-    getSessaoCapacidade(Ident, Capacidade),
-    concat_atom(['Capacidade:', Capacidade], ' ', FullCapacidade),
-    getColRow(Ident, Row, Col),
-    NextRow is Row + 1,
-    writeMatrixValue(FilePath, FullCapacidade, NextRow, Col).
-
-updateSessoesHorario(FilePath, Ident) :-
-    getSessaoHorario(Ident, Horario),
-    concat_atom(['Horario:', Horario], ' ', FullHorario),
-    getColRow(Ident, Row, Col),
-    NextRow is Row + 2,
-    writeMatrixValue(FilePath, FullHorario, NextRow, Col).
-
-updateSessoesIdSala(FilePath, Ident) :-
-    getSessaoIdSala(Ident, IdSala),
-    concat_atom(['IdSala:', IdSala], ' ', FullIdSala),
-    getColRow(Ident, Row, Col),
-    NextRow is Row + 2,
-    writeMatrixValue(FilePath, FullIdSala, NextRow, Col).
-
-getColRow(1, 12, 3).
-getColRow(2, 17, 3).
-getColRow(3, 22, 3).
-getColRow(4, 27, 3).
-getColRow(5, 32, 3).
-
-isSessaoValida(Ident, Bool) :-
-    getSessoesJSON(SessoesJson),
-    atom_number(Ident, IdentInt),
-    isSessaoValidoAuxiliar(IdentInt, SessoesJson, Bool).
-
-isSessaoValidaAuxiliar(_, [], false).
-isSessaoValidaAuxiliar(Ident, [sessao(Ident, IdFilme, Capacidade, Horario, IdSala)|_], true).
-isSessaoValidaAuxiliar(Ident, [_|Resto], Bool) :-
-    isSessaoValidaAuxiliar(Ident, Resto, Bool).
+% Horário da sessão
+horario(sessao(_, _, Horario, _, _), Horas, Minutos) :-
+    Horario = (Horas, Minutos).

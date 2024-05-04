@@ -37,7 +37,7 @@ adicionarFilme :-
     starMenuConfiguracoes.
 
 adicionarSessao :-
-    printMatrix("./Interfaces/Configuracoes/MenuCadastroSessoe.txt"),
+    printMatrix("./Interfaces/Configuracoes/MenuCadastroSessao.txt"),
     write("Digite o Identificador do filme:"),
     flush_output,
     read_line_to_string(user_input, IdFilme),
