@@ -7,6 +7,9 @@
 :- use_module('./Modelos/Administrador/AdministradorModel.pl').
 :- use_module('./Modelos/Sessao/SessaoModel.pl').
 :- use_module('./Servicos/Sessoes/SessoesController.pl').
+:- use_module('./Modelos/Produtos/ProdutoModel.pl').
+:- use_module('./Servicos/Bomboniere/BomboniereController.pl').
+
 
 startMenuConfiguracoes :-
     printMatrix('./Interfaces/Configuracoes/menuConfiguracoesAdmin.txt'),
@@ -22,6 +25,7 @@ optionsStartMenu(UserChoice) :-
     (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ; 
     (UserChoice == "S" ; UserChoice ==  "s") -> adicionarSessao ;
     (UserChoice == "A" ; UserChoice == "a") -> adicionarAdministrador;
+    (UserChoice == "B" ; UserChoice ==  "b") -> adicionarProdutoBomboniere ;
     writeln("\nOpção Inválida!"),
     sleep(0.7),
     startMenu.
@@ -59,7 +63,6 @@ adicionarSessao :-
         sleep(1.2),
         startMenuConfiguracoes
     ).
-
     
 adicionarAdministrador :-
     printMatrix("./Interfaces/Configuracoes/menuConfiguracoesLogin.txt"),
@@ -73,3 +76,12 @@ adicionarAdministrador :-
     saveAdministrador(Administrador),
     startMenuConfiguracoes.
 
+adicionarProdutoBomboniere :-
+    printMatrix("./Interfaces/Configuracoes/menuCadastroBomboniere.txt"),
+    write("Digite o título do produto: "),
+    read_line_to_string(user_input, Name),
+    write("Digite o preço do produto: "),
+    read_line_to_string(user_input, Preco),
+    createProduto("0", Name, Preco, Produto),
+    saveProduto(Produto),
+    startMenuConfiguracoes.
