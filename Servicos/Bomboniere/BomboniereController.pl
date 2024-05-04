@@ -1,4 +1,4 @@
-:- module(BomboniereController, [saveProduto/1, updateProdutosMenu/0, deleteProduto/1]).
+:- module(BomboniereController, [saveProduto/1, isProdutoValido/2 , updateProdutosMenu/0, deleteProduto/1]).
 
 :- use_module('./Utils/JsonUtils.pl').
 :- use_module('./Utils/MatrixUtils.pl').
@@ -105,3 +105,13 @@ getColRow(2, 17, 3).
 getColRow(3, 22, 3).
 getColRow(4, 27, 3).
 getColRow(5, 32, 3).
+
+isProdutoValido(Ident, Bool) :-
+    getProdutosJSON(ProdutosJson),
+    atom_number(Ident, IdentInt),
+    isProdutoValidoAuxiliar(IdentInt, ProdutosJson, Bool).
+
+isProdutoValidoAuxiliar(_, [], false).
+isProdutoValidoAuxiliar(Ident, [produto(Ident, Name, Preco)|_], true).
+isProdutoValidoAuxiliar(Ident, [_|Resto], Bool) :-
+    isProdutoValidoAuxiliar(Ident, Resto, Bool).
