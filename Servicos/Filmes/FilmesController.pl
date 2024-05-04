@@ -1,4 +1,4 @@
-:- module(FilmesController, [saveFilme/1, updateFilmesMenu/0]).
+:- module(FilmesController, [saveFilme/1, updateFilmesMenu/0, isFilmeValido/2, getFilmeName/2]).
 
 :- use_module('./Utils/JsonUtils.pl').
 :- use_module('./Utils/MatrixUtils.pl').
@@ -76,7 +76,6 @@ updateFilmesMenu :-
 updateAllFilmes(_, []) :- !.
 updateAllFilmes(FilePath, [H|T]) :-
     getFilmeIdent(H, Ident),
-    write(Ident),
     updateFilmesName(FilePath, Ident),
     updateFilmesDuracao(FilePath, Ident),
     updateFilmesGenero(FilePath, Ident),
@@ -107,3 +106,13 @@ getColRow(2, 17, 3).
 getColRow(3, 22, 3).
 getColRow(4, 27, 3).
 getColRow(5, 32, 3).
+
+isFilmeValido(Ident, Bool) :-
+    getFilmesJSON(FilmesJson),
+    atom_number(Ident, IdentInt),
+    isFilmeValidoAuxiliar(IdentInt, FilmesJson, Bool).
+
+isFilmeValidoAuxiliar(_, [], false).
+isFilmeValidoAuxiliar(Ident, [filme(Ident, Name, Duracao, Genero)|_], true).
+isFilmeValidoAuxiliar(Ident, [_|Resto], Bool) :-
+    isFilmeValidoAuxiliar(Ident, Resto, Bool).
