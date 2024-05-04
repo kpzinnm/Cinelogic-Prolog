@@ -29,5 +29,5 @@ loginAdministradorErrado :-
 
 loginAdministrador(Login, Senha) :-
     getLoginAdministrador(Login, Senha, Bool),
-    (Bool -> starMenuConfiguracoes; loginAdministradorErrado).
+    (Bool -> startMenuConfiguracoes; loginAdministradorErrado).
 

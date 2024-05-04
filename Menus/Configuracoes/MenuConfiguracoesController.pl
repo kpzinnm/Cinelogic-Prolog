@@ -1,12 +1,14 @@
-:- module(MenuConfiguracoesController, [starMenuConfiguracoes/0]).
+:- module(MenuConfiguracoesController, [startMenuConfiguracoes/0]).
 
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Modelos/Filmes/FilmeModel.pl').
 :- use_module('./Servicos/Filmes/FilmesController.pl').
 :- use_module('./Servicos/Administrador/AdministradorController.pl').
 :- use_module('./Modelos/Administrador/AdministradorModel.pl').
+:- use_module('./Modelos/Sessao/SessaoModel.pl').
+:- use_module('./Servicos/Sessoes/SessoesController.pl').
 
-starMenuConfiguracoes :-
+startMenuConfiguracoes :-
     printMatrix('./Interfaces/Configuracoes/menuConfiguracoesAdmin.txt'),
     write("Digite uma opção: "),
     flush_output,
@@ -34,28 +36,28 @@ adicionarFilme :-
     read_line_to_string(user_input, Genero),
     createFilme("0", Titulo, Duracao, Genero, Filme),
     saveFilme(Filme),
-    starMenuConfiguracoes.
+    startMenuConfiguracoes.
 
 adicionarSessao :-
     printMatrix("./Interfaces/Configuracoes/MenuCadastroSessao.txt"),
     write("Digite o Identificador do filme:"),
-    flush_output,
     read_line_to_string(user_input, IdFilme),
     isFilmeValido(IdFilme, Bool),
     (Bool ->
         write("Digite o horario no formato (<hora>, <minutos>): "),
-        flush_output,
-        read(Horario),
+        read_line_to_string(user_input, Horario),
         write("Informa a capacidade: "),
-        flush_output,
         read_line_to_string(user_input, Capacidade),
         write("Informe o ID da sala: "),
-        flush_output
+        read_line_to_string(user_input, IdSala),
+        createSessao("0", IdFilme, Horario, Capacidade, IdSala),
+        saveSessao(Sessao),
+        startMenuConfiguracoes.
         
         ;
         write("Filme não registrado"),
         sleep(1.2),
-        starMenuConfiguracoes
+        startMenuConfiguracoes
     ).
 
     
@@ -69,5 +71,5 @@ adicionarAdministrador :-
     read_line_to_string(user_input, UserPassword),
     createAdministrador(0, UserLogin, UserPassword, Administrador),
     saveAdministrador(Administrador),
-    starMenuConfiguracoes.
+    startMenuConfiguracoes.
 
