@@ -1,4 +1,4 @@
-:- module(ComprasController, [saveCompra/1]).
+:- module(ComprasController, [saveCompra/1, getComprasJSON/1]).
 
 :- use_module(library(http/json)).
 :- use_module('./Utils/JsonUtils.pl').

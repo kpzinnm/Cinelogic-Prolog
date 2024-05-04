@@ -3,6 +3,7 @@
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Modelos/Filmes/FilmeModel.pl').
 :- use_module('./Servicos/Filmes/FilmesController.pl').
+:- use_module('./Menus/Relatorios/MenuRelatorioController.pl').
 
 
 starMenuConfiguracoes :-
@@ -16,7 +17,8 @@ starMenuConfiguracoes :-
 
 optionsStartMenu(UserChoice) :-
     (UserChoice == "V" ; UserChoice ==  "v") -> startMenu ;  
-    (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ; 
+    (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ;
+    (UserChoice == "R" ; UserChoice ==  "r") -> menuRelatorio ; 
     writeln("\nOpção Inválida!"),
     sleep(0.7),
     startMenu.
@@ -32,5 +34,6 @@ adicionarFilme :-
     createFilme("0", Titulo, Duracao, Genero, Filme),
     saveFilme(Filme),
     starMenuConfiguracoes.
+
 
 
