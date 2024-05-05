@@ -29,12 +29,17 @@ startCompra :-
     flush_output,
     read_line_to_string(user_input, Ident),
     char_code(_, 1),
+    atom_number(Ident, IdentNumber),
     isProdutoValido(Ident, Bool),
     (Bool ->
         write("Por favor, insira a quantidade de produtos: "),
         flush_output,
-        read_line_to_string(user_input, QuantidadeProdutos),
-        createCompra(0, QuantidadeProdutos, 0, Ident, Compra),
+        read_line_to_string(user_input, QuantidadeProdutosString),
+        atom_number(QuantidadeProdutosString, QuantidadeProdutos),
+        getProdutoPreco(IdentNumber, Preco),
+        PrecoTotal is Preco * QuantidadeProdutos,
+        number_to_atom(PrecoTotal, PrecoTotalString),   
+        createCompra(0, QuantidadeProdutosString, PrecoTotalString, Ident, Compra),
         loadfinalizaCompraMenu(Compra)
         ;
         write("Produto inválido!"),
@@ -47,7 +52,7 @@ startCompra :-
 
 loadfinalizaCompraMenu(Compra):-
     updateFinalizacaoMenu(Compra),
-    printMatrix('./Interfaces/Compras/MenuFinalizacaoCompra.txt'),
+    printMatrix('./Interfaces/Compras/MenuFinalizacaoCompraProduto.txt'),
     write("Por favor, escolha uma opção: "),
     flush_output,
     read_line_to_string(user_input, UserChoice),
@@ -55,9 +60,9 @@ loadfinalizaCompraMenu(Compra):-
     optionsFinalizacaoMenu(UserChoice, Compra).
 
 updateFinalizacaoMenu(Compra) :-
-    Compra = compra(_,QuantidadeProdutos,ValorCompra, ProdutoIdent),
-    FilePath = "./Interfaces/Compras/MenuFinalizacaoCompra.txt",
-    resetMenu(FilePath, "./Interfaces/Compras/MenuFinalizacaoCompraBase.txt"),
+    Compra = compra(_,QuantidadeProdutos, ValorCompra, ProdutoIdent),
+    FilePath = "./Interfaces/Compras/MenuFinalizacaoCompraProduto.txt",
+    resetMenu(FilePath, "./Interfaces/Compras/MenuFinalizacaoCompraProdutoBase.txt"),
     concat_atom(["* Quantidade de produtos Comprados: ", QuantidadeProdutos], ' ', NumeroFull),
     concat_atom(["* Valor da Compra: ", ValorCompra], ' ', ValorFull),
     writeMatrixValue(FilePath, NumeroFull, 15, 24),
@@ -73,3 +78,7 @@ optionsFinalizacaoMenu(UserChoice, Compra) :-
 finalizaCompra(Compra):-
     saveCompra(Compra),
     startMenuCompraBomboniere.
+
+number_to_atom(Number, Atom) :-
+    number_codes(Number, Codes),
+    atom_codes(Atom, Codes).

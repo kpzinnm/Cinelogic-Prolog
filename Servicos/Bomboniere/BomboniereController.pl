@@ -1,4 +1,4 @@
-:- module(BomboniereController, [saveProduto/1, isProdutoValido/2 , updateProdutosMenu/0, deleteProduto/1]).
+:- module(BomboniereController, [saveProduto/1, isProdutoValido/2 , updateProdutosMenu/0, deleteProduto/1, getProdutoPreco/2]).
 
 :- use_module('./Utils/JsonUtils.pl').
 :- use_module('./Utils/MatrixUtils.pl').
@@ -18,7 +18,7 @@ saveProduto(Produto) :-
     open("./BancoDeDados/Bomboniere/Bomboniere.json", write, Stream), write(Stream, Saida), close(Stream).
 
 produtoToJSON(Ident, Name, Preco, Out) :-
-	swritef(Out, '{"ident": %w, "name": "%w", "preco": "%w"}', [Ident, Name, Preco]).
+	swritef(Out, '{"ident": %w, "name": "%w", "preco": %w}', [Ident, Name, Preco]).
 
 produtosToJSON([], []).
 produtosToJSON([H|T], [X|Out]) :- 

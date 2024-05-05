@@ -14,13 +14,10 @@
 │                                                                                                  │
 │                                                                                                  │
 │                                                                                                  │
-│                                ADICIONAR FILMES ► F                                              │
-│                                ADICIONAR ADMINISTRADOR ► A                                       │
-│                                ADICIONAR SESSAO ► S                                              |
-|                                RELATORIOS ► R                                                    |
-|                                ATUALIZAR VALOR DO INGRESSO ► I                                   |
-|                                VOLTAR ► V                                                        │
+|                                VALOR INGRESSO (0.0) ► ___                                        │
+│                                                                                                  |
 │                                                                                                  │
+│                                                                                                  |
 │                                                                                                  │
 │                                                                                                  │
 │                                                                                                  │
@@ -34,6 +31,7 @@
 │                                                                                                  │
 │                                                                                                  |   
 |                                                                                                  | 
+|                                                                                                  |
 |                                                                                                  |
 |                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘

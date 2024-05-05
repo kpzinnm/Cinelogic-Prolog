@@ -9,6 +9,10 @@
 :- use_module('./Servicos/Sessoes/SessoesController.pl').
 :- use_module('./Modelos/Produtos/ProdutoModel.pl').
 :- use_module('./Servicos/Bomboniere/BomboniereController.pl').
+:- use_module('./Menus/Relatorios/MenuRelatorioController.pl').
+:- use_module('./Servicos/Administrador/AdministradorController.pl').
+:- use_module('./Modelos/Administrador/AdministradorModel.pl').
+:- use_module('./Servicos/Compras/ValorIngressoController.pl').
 
 
 startMenuConfiguracoes :-
@@ -22,10 +26,12 @@ startMenuConfiguracoes :-
 
 optionsStartMenu(UserChoice) :-
     (UserChoice == "V" ; UserChoice ==  "v") -> startMenu ;  
+    (UserChoice == "R" ; UserChoice ==  "r") -> menuRelatorio ; 
     (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ; 
     (UserChoice == "S" ; UserChoice ==  "s") -> adicionarSessao ;
-    (UserChoice == "A" ; UserChoice ==  "a") -> adicionarAdministrador;
-    (UserChoice == "B" ; UserChoice ==  "b") -> adicionarProdutoBomboniere ;
+    (UserChoice == "I" ; UserChoice ==  "i") -> atualizaValorIngresso ;
+    (UserChoice == "A" ; UserChoice == "a") -> adicionarAdministrador;
+
     writeln("\nOpção Inválida!"),
     sleep(0.7),
     startMenu.
@@ -40,43 +46,31 @@ adicionarFilme :-
     read_line_to_string(user_input, Genero),
     createFilme("0", Titulo, Duracao, Genero, Filme),
     saveFilme(Filme),
-    startMenuConfiguracoes.
+
+    starMenuConfiguracoes.
 
 adicionarSessao :-
-    printMatrix("./Interfaces/Configuracoes/MenuCadastroSessao.txt"),
-    write("Digite o ID do filme: "),
+    printMatrix("./Interfaces/Configuracoes/MenuCadastroSessoe.txt"),
+    write("Digite o Identificador do filme:"),
+    flush_output,
     read_line_to_string(user_input, IdFilme),
     isFilmeValido(IdFilme, Bool),
     (Bool ->
-        write("Digite a hora: "),
-        read_line_to_string(user_input, Hora),
-	write("Digite os minutos: "),
-	read_line_to_string(user_input, Minutos),
-
-	horaToList(Hora, Minutos, Lista),
-
-	(isHorarioValido(Hora, Minutos) ->
-	    write("Informe a capacidade: "),
-	    read_line_to_string(user_input, Capacidade),
-	    write("Informe o ID da sala: "),
-	    read_line_to_string(user_input, IdSala),
-	    
-	    createSessao("0", IdFilme, Lista, Capacidade, IdSala, Sessao),
-	    saveSessao(Sessao),
-	    startMenuConfiguracoes;
-
-	    write("Horário inválido!"),
-	    flush_output,
-	    sleep(1),
-	    startMenuConfiguracoes
-    	);
+        write("Digite o horario no formato (<hora>, <minutos>): "),
+        flush_output,
+        read(Horario),
+        write("Informa a capacidade: "),
+        flush_output,
+        read_line_to_string(user_input, Capacidade),
+        write("Informe o ID da sala: "),
+        flush_output
         
-	write("Filme não registrado"),
-	flush_output,
+        ;
+        write("Filme não registrado"),
         sleep(1.2),
-        startMenuConfiguracoes
+        starMenuConfiguracoes
     ).
-    
+
 adicionarAdministrador :-
     printMatrix("./Interfaces/Configuracoes/menuConfiguracoesLogin.txt"),
     write("Digite o login: "),
@@ -85,9 +79,10 @@ adicionarAdministrador :-
     write("Digite a senha: "),
     flush_output,
     read_line_to_string(user_input, UserPassword),
-    createAdministrador(0, UserLogin, UserPassword, Administrador),
+    getValorIngressoJSON(Valor),
+    createAdministrador(Valor, UserLogin, UserPassword, Administrador),
     saveAdministrador(Administrador),
-    startMenuConfiguracoes.
+    starMenuConfiguracoes.
 
 adicionarProdutoBomboniere :-
     printMatrix("./Interfaces/Configuracoes/menuCadastroBomboniere.txt"),
@@ -107,8 +102,18 @@ horaToList(Hora, Minutos, Lista) :-
 isHorarioValido(Hora, Minutos) :-
     atom_number(Hora, HoraN),
     atom_number(Minutos, MinutosN),
-
     HoraN >= 0,
     HoraN =< 23,
     MinutosN >= 0,
     MinutosN =< 60.
+
+atualizaValorIngresso :-
+    printMatrix("./Interfaces/Configuracoes/MenuAtualizaValorIngresso.txt"),
+    write("Digite o valor do ingresso: "),
+    flush_output,
+    read_line_to_string(user_input, Valor),
+    saveValorIngresso(Valor),
+    write("Valor Atualizado"),
+    flush_output,
+    sleep(1.2),
+    starMenuConfiguracoes.

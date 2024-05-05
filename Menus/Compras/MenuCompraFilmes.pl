@@ -7,6 +7,10 @@
 :- use_module('./Utils/UpdateUtils.pl').
 :- use_module(library(time)).
 
+:- use_module('./Servicos/Compras/ValorIngressoController.pl').
+
+
+
 
 startMenuCompraFilmes :-
     updateFilmesMenu,
@@ -38,10 +42,13 @@ startCompra(EmailComprador) :-
     char_code(_, 1),
     isFilmeValido(Ident, Bool),
     (Bool ->
-        write("Por favor, insira o número de ingressos: "),
+        write('Por favor, insira o número de ingressos: '),
         flush_output,
-        read_line_to_string(user_input, NumeroIngressos),
-        createCompra(0, EmailComprador, NumeroIngressos, 0, Ident, Compra),
+        read_line_to_string(user_input, NumeroIngressosString),
+        atom_number(NumeroIngressosString, NumeroIngressos),
+        getValorIngressoJSON(ValorUnitario),
+        ValorCompra is ValorUnitario * NumeroIngressos,
+        createCompra(0, EmailComprador, NumeroIngressos, ValorCompra, Ident, Compra),
         loadfinalizaCompraMenu(Compra)
         ;
         write("Filme inválido!"),
