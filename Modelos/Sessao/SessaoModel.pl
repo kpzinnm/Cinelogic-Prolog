@@ -2,4 +2,4 @@
 
 
 createSessao(Ident, IdFilme, Horario, Capacidade, IdSala, Sessao) :-
-    Sessao = sessao(IdFilme, Horario, Capacidade, IdSala).
+    Sessao = sessao(Ident, IdFilme, Horario, Capacidade, IdSala).

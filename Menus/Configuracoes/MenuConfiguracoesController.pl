@@ -24,7 +24,7 @@ optionsStartMenu(UserChoice) :-
     (UserChoice == "V" ; UserChoice ==  "v") -> startMenu ;  
     (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ; 
     (UserChoice == "S" ; UserChoice ==  "s") -> adicionarSessao ;
-    (UserChoice == "A" ; UserChoice == "a") -> adicionarAdministrador;
+    (UserChoice == "A" ; UserChoice ==  "a") -> adicionarAdministrador;
     (UserChoice == "B" ; UserChoice ==  "b") -> adicionarProdutoBomboniere ;
     writeln("\nOpção Inválida!"),
     sleep(0.7),
@@ -44,22 +44,35 @@ adicionarFilme :-
 
 adicionarSessao :-
     printMatrix("./Interfaces/Configuracoes/MenuCadastroSessao.txt"),
-    write("Digite o Identificador do filme:"),
+    write("Digite o ID do filme: "),
     read_line_to_string(user_input, IdFilme),
     isFilmeValido(IdFilme, Bool),
     (Bool ->
-        write("Digite o horario no formato (<hora>, <minutos>): "),
-        read_line_to_string(user_input, Horario),
-        write("Informa a capacidade: "),
-        read_line_to_string(user_input, Capacidade),
-        write("Informe o ID da sala: "),
-        read_line_to_string(user_input, IdSala),
-        createSessao("0", IdFilme, Horario, Capacidade, IdSala),
-        saveSessao(Sessao),
-        startMenuConfiguracoes.
+        write("Digite a hora: "),
+        read_line_to_string(user_input, Hora),
+	write("Digite os minutos: "),
+	read_line_to_string(user_input, Minutos),
+
+	horaToList(Hora, Minutos, Lista),
+
+	(isHorarioValido(Hora, Minutos) ->
+	    write("Informe a capacidade: "),
+	    read_line_to_string(user_input, Capacidade),
+	    write("Informe o ID da sala: "),
+	    read_line_to_string(user_input, IdSala),
+	    
+	    createSessao("0", IdFilme, Lista, Capacidade, IdSala, Sessao),
+	    saveSessao(Sessao),
+	    startMenuConfiguracoes;
+
+	    write("Horário inválido!"),
+	    flush_output,
+	    sleep(1),
+	    startMenuConfiguracoes
+    	);
         
-        ;
-        write("Filme não registrado"),
+	write("Filme não registrado"),
+	flush_output,
         sleep(1.2),
         startMenuConfiguracoes
     ).
@@ -85,3 +98,17 @@ adicionarProdutoBomboniere :-
     createProduto("0", Name, Preco, Produto),
     saveProduto(Produto),
     startMenuConfiguracoes.
+
+horaToList(Hora, Minutos, Lista) :-
+    atom_number(Hora, HoraNumber),
+    atom_number(Minutos, MinutosNumber),
+    Lista = [HoraNumber, MinutosNumber].
+
+isHorarioValido(Hora, Minutos) :-
+    atom_number(Hora, HoraN),
+    atom_number(Minutos, MinutosN),
+
+    HoraN >= 0,
+    HoraN =< 23,
+    MinutosN >= 0,
+    MinutosN =< 60.
