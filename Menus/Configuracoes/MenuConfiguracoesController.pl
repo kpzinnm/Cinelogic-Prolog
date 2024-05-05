@@ -1,4 +1,4 @@
-:- module(MenuConfiguracoesController, [starMenuConfiguracoes/0]).
+:- module(MenuConfiguracoesController, [startMenuConfiguracoes/0]).
 
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Modelos/Filmes/FilmeModel.pl').
@@ -8,7 +8,7 @@
 :- use_module('./Servicos/Compras/ValorIngressoController.pl').
 
 
-starMenuConfiguracoes :-
+startMenuConfiguracoes :-
     printMatrix('./Interfaces/Configuracoes/menuConfiguracoesAdmin.txt'),
     write("Digite uma opção: "),
     flush_output,
