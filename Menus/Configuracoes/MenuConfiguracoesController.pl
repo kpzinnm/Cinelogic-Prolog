@@ -46,8 +46,7 @@ adicionarFilme :-
     read_line_to_string(user_input, Genero),
     createFilme("0", Titulo, Duracao, Genero, Filme),
     saveFilme(Filme),
-
-    starMenuConfiguracoes.
+    startMenuConfiguracoes.
 
 adicionarSessao :-
     printMatrix("./Interfaces/Configuracoes/MenuCadastroSessao.txt"),
@@ -92,7 +91,7 @@ adicionarAdministrador :-
     getValorIngressoJSON(Valor),
     createAdministrador(Valor, UserLogin, UserPassword, Administrador),
     saveAdministrador(Administrador),
-    starMenuConfiguracoes.
+    startMenuConfiguracoes.
 
 adicionarProdutoBomboniere :-
     printMatrix("./Interfaces/Configuracoes/menuCadastroBomboniere.txt"),
@@ -126,4 +125,4 @@ atualizaValorIngresso :-
     write("Valor Atualizado"),
     flush_output,
     sleep(1.2),
-    starMenuConfiguracoes.
+    startMenuConfiguracoes.
