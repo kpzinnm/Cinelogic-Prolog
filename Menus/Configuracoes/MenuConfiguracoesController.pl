@@ -3,6 +3,7 @@
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Modelos/Filmes/FilmeModel.pl').
 :- use_module('./Servicos/Filmes/FilmesController.pl').
+:- use_module('./Menus/Relatorios/MenuRelatorioController.pl').
 :- use_module('./Servicos/Administrador/AdministradorController.pl').
 :- use_module('./Modelos/Administrador/AdministradorModel.pl').
 :- use_module('./Servicos/Compras/ValorIngressoController.pl').
@@ -19,6 +20,7 @@ startMenuConfiguracoes :-
 
 optionsStartMenu(UserChoice) :-
     (UserChoice == "V" ; UserChoice ==  "v") -> startMenu ;  
+    (UserChoice == "R" ; UserChoice ==  "r") -> menuRelatorio ; 
     (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ; 
     (UserChoice == "S" ; UserChoice ==  "s") -> adicionarSessao ;
     (UserChoice == "I" ; UserChoice ==  "i") -> atualizaValorIngresso ;
@@ -61,7 +63,6 @@ adicionarSessao :-
         starMenuConfiguracoes
     ).
 
-    
 adicionarAdministrador :-
     printMatrix("./Interfaces/Configuracoes/menuConfiguracoesLogin.txt"),
     write("Digite o login: "),
