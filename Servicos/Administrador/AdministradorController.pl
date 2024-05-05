@@ -25,7 +25,7 @@ saveAdministrador(Administrador) :-
         
         write('Login já existente. \n'),
         sleep(1.3),
-        starMenuConfiguracoes).
+        startMenuConfiguracoes).
 
 
 administradorToJSON(Ident, Login, Senha, Out) :-
