@@ -1,0 +1,1 @@
+echo "OBVIO QUE EU USO LINUX!!"
