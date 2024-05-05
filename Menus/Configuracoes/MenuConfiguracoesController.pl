@@ -3,6 +3,12 @@
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Modelos/Filmes/FilmeModel.pl').
 :- use_module('./Servicos/Filmes/FilmesController.pl').
+:- use_module('./Servicos/Administrador/AdministradorController.pl').
+:- use_module('./Modelos/Administrador/AdministradorModel.pl').
+:- use_module('./Modelos/Sessao/SessaoModel.pl').
+:- use_module('./Servicos/Sessoes/SessoesController.pl').
+:- use_module('./Modelos/Produtos/ProdutoModel.pl').
+:- use_module('./Servicos/Bomboniere/BomboniereController.pl').
 :- use_module('./Menus/Relatorios/MenuRelatorioController.pl').
 :- use_module('./Servicos/Administrador/AdministradorController.pl').
 :- use_module('./Modelos/Administrador/AdministradorModel.pl').
@@ -25,6 +31,7 @@ optionsStartMenu(UserChoice) :-
     (UserChoice == "S" ; UserChoice ==  "s") -> adicionarSessao ;
     (UserChoice == "I" ; UserChoice ==  "i") -> atualizaValorIngresso ;
     (UserChoice == "A" ; UserChoice == "a") -> adicionarAdministrador;
+
     writeln("\nOpção Inválida!"),
     sleep(0.7),
     startMenu.
@@ -39,6 +46,7 @@ adicionarFilme :-
     read_line_to_string(user_input, Genero),
     createFilme("0", Titulo, Duracao, Genero, Filme),
     saveFilme(Filme),
+
     starMenuConfiguracoes.
 
 adicionarSessao :-
@@ -75,6 +83,29 @@ adicionarAdministrador :-
     createAdministrador(Valor, UserLogin, UserPassword, Administrador),
     saveAdministrador(Administrador),
     starMenuConfiguracoes.
+
+adicionarProdutoBomboniere :-
+    printMatrix("./Interfaces/Configuracoes/menuCadastroBomboniere.txt"),
+    write("Digite o título do produto: "),
+    read_line_to_string(user_input, Name),
+    write("Digite o preço do produto: "),
+    read_line_to_string(user_input, Preco),
+    createProduto("0", Name, Preco, Produto),
+    saveProduto(Produto),
+    startMenuConfiguracoes.
+
+horaToList(Hora, Minutos, Lista) :-
+    atom_number(Hora, HoraNumber),
+    atom_number(Minutos, MinutosNumber),
+    Lista = [HoraNumber, MinutosNumber].
+
+isHorarioValido(Hora, Minutos) :-
+    atom_number(Hora, HoraN),
+    atom_number(Minutos, MinutosN),
+    HoraN >= 0,
+    HoraN =< 23,
+    MinutosN >= 0,
+    MinutosN =< 60.
 
 atualizaValorIngresso :-
     printMatrix("./Interfaces/Configuracoes/MenuAtualizaValorIngresso.txt"),

@@ -6,7 +6,9 @@
 :- use_module('./Servicos/Compras/ComprasController.pl').
 :- use_module('./Utils/UpdateUtils.pl').
 :- use_module(library(time)).
+
 :- use_module('./Servicos/Compras/ValorIngressoController.pl').
+
 
 
 
