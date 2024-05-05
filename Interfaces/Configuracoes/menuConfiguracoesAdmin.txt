@@ -17,6 +17,7 @@
 │                                ADICIONAR FILMES ► F                                              │
 │                                ADICIONAR ADMINISTRADOR ► A                                       │
 │                                ADICIONAR SESSAO ► S                                              |
+|                                ATUALIZAR VALOR DO INGRESSO ► I                                   |
 |                                VOLTAR ► V                                                        │
 │                                                                                                  │
 │                                                                                                  │
