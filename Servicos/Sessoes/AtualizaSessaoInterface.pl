@@ -25,7 +25,6 @@ atualizaSessoes([Sessao|T], IDDoFilme, PosicaoDaSessao) :-
     Sessao = sessao(Ident, IdFilme, Horario, Capacidade, IdSala),
     atom_number(IdFilme, IdFilmeInt),
     (comparaIdent(IDDoFilme, IdFilmeInt) -> 
-        write("Atualiza Sessoes"),
         atualizaNomeSessao(IDDoFilme, PosicaoDaSessao),
         atualizaHorarioSessao(IDDoFilme, Horario, PosicaoDaSessao),
         atualizaSalaSessao(IDDoFilme, IdSala, PosicaoDaSessao),
