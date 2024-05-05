@@ -33,7 +33,7 @@ optionsGraficoMenu(UserChoice) :-
 
 
 optionsRelarotiotMenu(UserChoice) :-
-    (UserChoice == "V" ; UserChoice ==  "v") -> starMenuConfiguracoes ;
+    (UserChoice == "V" ; UserChoice ==  "v") -> startMenuConfiguracoes ;
     (UserChoice == "G" ; UserChoice ==  "g") -> menuGraficoRelatorio ;
     writeln("\nOpção Inválida!"),
     sleep(0.7),
