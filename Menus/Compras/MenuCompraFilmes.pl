@@ -9,7 +9,7 @@
 
 :- use_module('./Servicos/Compras/ValorIngressoController.pl').
 :- use_module('./Servicos/Filmes/FilmesController.pl').
-
+:- use_module('./Servicoes/Sessoes/SessoesController.pl').
 
 
 
@@ -40,7 +40,9 @@ startCompra(EmailComprador) :-
     write("Por favor, insira o número do Filme: "),       
     flush_output,
     read_line_to_string(user_input, Ident),
-    char_code(_, 1),
+    write("Por favor, insira o número da Sessão: "),
+    flush_output,
+    read_line_to_string(user, IdentSessao),
     isFilmeValido(Ident, Bool),
     (Bool ->
         write('Por favor, insira o número de ingressos: '),
