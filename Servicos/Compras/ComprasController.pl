@@ -7,9 +7,6 @@
 
 saveCompra(Compra) :- 
     getComprasJSON(ListaCompras),
-    write(Compra),
-    flush_output,
-    sleep(5.0),
     length(ListaCompras, Tamanho),
     Compra = compra(Ident, EmailCliente, NumeroIngressos, ValorCompra, FilmeIdent),
     lerJSON("./BancoDeDados/Compras/Compra.json", File),

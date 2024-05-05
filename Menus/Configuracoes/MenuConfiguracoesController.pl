@@ -76,7 +76,7 @@ adicionarAdministrador :-
     starMenuConfiguracoes.
 
 atualizaValorIngresso :-
-    printMatrix("./Interfaces/Configuracoes/MenuCadastroDeFilmes.txt"),
+    printMatrix("./Interfaces/Configuracoes/MenuAtualizaValorIngresso.txt"),
     write("Digite o valor do ingresso: "),
     flush_output,
     read_line_to_string(user_input, Valor),
