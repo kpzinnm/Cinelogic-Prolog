@@ -8,6 +8,7 @@
 :- use_module(library(time)).
 
 :- use_module('./Servicos/Compras/ValorIngressoController.pl').
+:- use_module('./Servicos/Filmes/FilmesController.pl').
 
 
 

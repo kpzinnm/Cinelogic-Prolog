@@ -1,9 +1,10 @@
-:- module(FilmesController, [saveFilme/1, updateFilmesMenu/0, isFilmeValido/2, getFilmeName/2, getFilmesJSON/1, getFilmeIdent/2, getFilmeName/2]).
+:- module(FilmesController, [saveFilme/1, updateFilmesMenu/0, isFilmeValido/2, getFilmeName/2, getFilmesJSON/1, getFilmeIdent/2, getFilmeName/2, atualizaSessoesFilmesInterface/0]).
 
 :- use_module('./Utils/JsonUtils.pl').
 :- use_module('./Utils/MatrixUtils.pl').
 :- use_module('./Utils/UpdateUtils.pl').
 :- use_module(library(http/json)).
+:- use_module('./Servicos/Sessoes/AtualizaSessaoInterface.pl').
 
 /*Funções de save filmes*/
 saveFilme(Filme) :- 
@@ -22,6 +23,16 @@ saveFilme(Filme) :-
         sleep(1.3)
     ).
 
+atualizaSessoesFilmesInterface :-
+    getFilmesJSON(ListaFilmes),
+    %loadSessoesDoFilme(1).
+    atualizaInterfaceAuxiliar(ListaFilmes).
+
+atualizaInterfaceAuxiliar([]).
+atualizaInterfaceAuxiliar([filme(Ident, Name, Duracao, Genero)|T]) :-
+    %atom_number(Ident, IdentInt),
+    loadSessoesDoFilme(Ident),
+    atualizaInterfaceAuxiliar(T).
 
 filmeToJSON(Ident, Name, Duracao, Genero, Out) :-
 	swritef(Out, '{"ident": %w, "name": "%w", "duracao": "%w", "genero": "%w"}', [Ident, Name, Duracao, Genero]).
@@ -71,6 +82,7 @@ updateFilmesMenu :-
     FilePath = "./Interfaces/Compras/Filmes/MenuCompraFilmes.txt",
     resetMenu(FilePath, "./Interfaces/Compras/Filmes/MenuCompraFilmesBase.txt"),
     getFilmesJSON(Filmes),
+    atualizaInterfaceAuxiliar(Filmes),
     updateAllFilmes(FilePath, Filmes).
 
 updateAllFilmes(_, []) :- !.

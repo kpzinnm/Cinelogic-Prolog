@@ -50,26 +50,36 @@ adicionarFilme :-
     starMenuConfiguracoes.
 
 adicionarSessao :-
-    printMatrix("./Interfaces/Configuracoes/MenuCadastroSessoe.txt"),
+    printMatrix("./Interfaces/Configuracoes/MenuCadastroSessao.txt"),
     write("Digite o Identificador do filme:"),
     flush_output,
     read_line_to_string(user_input, IdFilme),
     isFilmeValido(IdFilme, Bool),
     (Bool ->
-        write("Digite o horario no formato (<hora>, <minutos>): "),
-        flush_output,
-        read(Horario),
-        write("Informa a capacidade: "),
-        flush_output,
-        read_line_to_string(user_input, Capacidade),
-        write("Informe o ID da sala: "),
-        flush_output
-        
-        ;
-        write("Filme não registrado"),
-        sleep(1.2),
-        starMenuConfiguracoes
+        write("Digite a hora: "),
+        read_line_to_string(user_input, Hora),
+        write("Digite os minutos: "),
+        read_line_to_string(user_input, Minutos),
+
+        horaToList(Hora, Minutos, Lista),
+
+        (isHorarioValido(Hora, Minutos) ->
+            write("Informe a capacidade: "),
+            read_line_to_string(user_input, Capacidade),
+            write("Informe o ID da sala: "),
+            read_line_to_string(user_input, IdSala),
+
+            createSessao("0", IdFilme, Lista, Capacidade, IdSala, Sessao),
+            saveSessao(Sessao),
+            startMenuConfiguracoes;
+
+            write("Horário inválido!"),
+            flush_output,
+            sleep(1),
+            startMenuConfiguracoes
+            )
     ).
+   
 
 adicionarAdministrador :-
     printMatrix("./Interfaces/Configuracoes/menuConfiguracoesLogin.txt"),
