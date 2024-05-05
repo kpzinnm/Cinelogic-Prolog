@@ -1,7 +1,6 @@
 :- module(matrixUtils, [printMatrix/1, writeMatrixValue/4]).
 
 
-% Printa no terminal o conteúdo do arquivo .txt
 printMatrix(NomeArquivo) :-
     write('\e[H\e[2J'),
     open(NomeArquivo, read, Stream),
@@ -16,7 +15,6 @@ printMatrix(NomeArquivo) :-
     close(Stream).
 
 
-% Sobrescreve no arquivo .txt um novo valor
 writeMatrixValue(Arquivo, Valor, Linha, Coluna) :-
     string_chars(Valor, CharList),
     writeValue(Arquivo, Linha, Coluna, CharList).
