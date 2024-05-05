@@ -5,6 +5,8 @@
 :- use_module('./Servicos/Filmes/FilmesController.pl').
 :- use_module('./Servicos/Administrador/AdministradorController.pl').
 :- use_module('./Modelos/Administrador/AdministradorModel.pl').
+:- use_module('./Servicos/Compras/ValorIngressoController.pl').
+
 
 starMenuConfiguracoes :-
     printMatrix('./Interfaces/Configuracoes/menuConfiguracoesAdmin.txt'),
@@ -19,6 +21,7 @@ optionsStartMenu(UserChoice) :-
     (UserChoice == "V" ; UserChoice ==  "v") -> startMenu ;  
     (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ; 
     (UserChoice == "S" ; UserChoice ==  "s") -> adicionarSessao ;
+    (UserChoice == "I" ; UserChoice ==  "i") -> atualizaValorIngresso ;
     (UserChoice == "A" ; UserChoice == "a") -> adicionarAdministrador;
     writeln("\nOpção Inválida!"),
     sleep(0.7),
@@ -67,7 +70,18 @@ adicionarAdministrador :-
     write("Digite a senha: "),
     flush_output,
     read_line_to_string(user_input, UserPassword),
-    createAdministrador(0, UserLogin, UserPassword, Administrador),
+    getValorIngressoJSON(Valor),
+    createAdministrador(Valor, UserLogin, UserPassword, Administrador),
     saveAdministrador(Administrador),
     starMenuConfiguracoes.
 
+atualizaValorIngresso :-
+    printMatrix("./Interfaces/Configuracoes/MenuCadastroDeFilmes.txt"),
+    write("Digite o valor do ingresso: "),
+    flush_output,
+    read_line_to_string(user_input, Valor),
+    saveValorIngresso(Valor),
+    write("Valor Atualizado"),
+    flush_output,
+    sleep(1.2),
+    starMenuConfiguracoes.
