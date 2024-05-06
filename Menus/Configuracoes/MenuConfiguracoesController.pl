@@ -30,7 +30,8 @@ optionsStartMenu(UserChoice) :-
     (UserChoice == "F" ; UserChoice ==  "f") -> adicionarFilme ; 
     (UserChoice == "S" ; UserChoice ==  "s") -> adicionarSessao ;
     (UserChoice == "I" ; UserChoice ==  "i") -> atualizaValorIngresso ;
-    (UserChoice == "A" ; UserChoice == "a") -> adicionarAdministrador;
+    (UserChoice == "A" ; UserChoice ==  "a") -> adicionarAdministrador;
+    (UserChoice == "B" ; UserChoice ==  "b") -> adicionarProdutoBomboniere;
 
     writeln("\nOpção Inválida!"),
     sleep(0.7),
