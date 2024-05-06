@@ -19,8 +19,8 @@ Para os clientes, o sistema visa uma experiência de compra simplificada e perso
 ------
 ### Demonstração
 Veja o video de demonstração do projeto em funcionamento.
-https://www.youtube.com/watch?v=cBKzuX5rpCY
-![image](https://github.com/Projetinho-PLP/ProjetoPLPHaskell/assets/100965133/54f4d3ec-c3d7-4cc7-a78d-0f4918b16e06)
+https://www.youtube.com/watch?v=rLvvyQGbdQU
+![image](https://github.com/Projetinho-PLP/ProjetoPLPProlog/assets/100965133/5821a877-8ac4-4398-9f48-47ad4e171554)
 
 ----
 
