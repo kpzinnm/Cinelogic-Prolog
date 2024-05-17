@@ -1,7 +1,7 @@
 # ProjetoPLP Prolog
 
  CineLogic
- Sistema de automação de vendas para cinemas
+Sistema de automação de vendas para cinemas, desenvolvido com o paradigma lógico utilizando a linguagem de programação Prolog.
 
 ### Componentes:
 - pedro.braz@ccc.ufcg.edu.br
